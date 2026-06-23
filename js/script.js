@@ -165,73 +165,169 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   /* ------------------------------------------------------------------
-     8) FORMULARIO DE CONTACTO: validación + envío por mailto
+     8) FORMULARIO DE CONTACTO — validación + EmailJS + modal de resultado
      ------------------------------------------------------------------ */
-  const EMAIL_DESTINO = 'jampierdev@gmail.com';
-  const nombre  = document.getElementById('nombre');
-  const email   = document.getElementById('email');
-  const mensaje = document.getElementById('mensaje');
-  const submit  = document.getElementById('formSubmit');
-  const note     = document.getElementById('formNote');
+
+  /* ── Credenciales EmailJS ─────────────────────────────────────────────
+     Reemplaza estos tres valores con los que obtengas en emailjs.com     */
+  const EMAILJS_PUBLIC_KEY  = 'TU_PUBLIC_KEY';   // Account > API Keys
+  const EMAILJS_SERVICE_ID  = 'TU_SERVICE_ID';   // Email Services
+  const EMAILJS_TEMPLATE_ID = 'TU_TEMPLATE_ID';  // Email Templates
+  /* ───────────────────────────────────────────────────────────────────── */
+
+  emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+
+  // Campos del formulario
+  const empresa  = document.getElementById('empresa');
+  const telefono = document.getElementById('telefono');
+  const email    = document.getElementById('email');
+  const mensaje  = document.getElementById('mensaje');
+  const submit   = document.getElementById('formSubmit');
+
+  // Modal de resultado (submit)
+  const submitModal   = document.getElementById('submitModal');
+  const sStateLoading = document.getElementById('sStateLoading');
+  const sStateSuccess = document.getElementById('sStateSuccess');
+  const sStateError   = document.getElementById('sStateError');
+  const sModalOk      = document.getElementById('sModalOk');
+  const sModalClose   = document.getElementById('sModalClose');
+  const sModalErrorMsg = document.getElementById('sModalErrorMsg');
 
   const setError = (input, hasError) => {
     input.closest('.field').classList.toggle('has-error', hasError);
   };
 
-  const validarEmail = (valor) =>
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor.trim());
+  const validarEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
 
-  // Quita el error en cuanto el usuario corrige el campo
-  [nombre, email, mensaje].forEach(input => {
-    input.addEventListener('input', () => setError(input, false));
+  // Limpia el error en cuanto el usuario escribe
+  [empresa, telefono, email, mensaje].forEach(inp => {
+    inp.addEventListener('input', () => setError(inp, false));
+  });
+
+  // Abre el modal de envío y muestra el estado indicado
+  const showSubmitModal = (state, errorMsg) => {
+    [sStateLoading, sStateSuccess, sStateError].forEach(el => el.classList.remove('is-active'));
+    if (state === 'loading') sStateLoading.classList.add('is-active');
+    if (state === 'success') sStateSuccess.classList.add('is-active');
+    if (state === 'error')   sStateError.classList.add('is-active');
+    if (errorMsg) sModalErrorMsg.textContent = errorMsg;
+    submitModal.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+  };
+
+  const closeSubmitModal = () => {
+    submitModal.classList.remove('is-open');
+    document.body.style.overflow = '';
+  };
+
+  if (sModalOk)    sModalOk.addEventListener('click',    closeSubmitModal);
+  if (sModalClose) sModalClose.addEventListener('click', closeSubmitModal);
+  submitModal.addEventListener('click', (e) => {
+    if (e.target === submitModal) closeSubmitModal();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && submitModal.classList.contains('is-open')) closeSubmitModal();
   });
 
   submit.addEventListener('click', () => {
-    const okNombre  = nombre.value.trim().length >= 2;
-    const okEmail   = validarEmail(email.value);
-    const okMensaje = mensaje.value.trim().length >= 10;
+    // Validación de campos
+    const okEmpresa  = empresa.value.trim().length >= 2;
+    const okTelefono = telefono.value.trim().length >= 7;
+    const okEmail    = validarEmail(email.value);
+    const okMensaje  = mensaje.value.trim().length >= 10;
 
-    setError(nombre,  !okNombre);
-    setError(email,   !okEmail);
-    setError(mensaje, !okMensaje);
+    setError(empresa,  !okEmpresa);
+    setError(telefono, !okTelefono);
+    setError(email,    !okEmail);
+    setError(mensaje,  !okMensaje);
 
-    // Enfoca el primer campo con error
-    if (!okNombre)      { nombre.focus();  return; }
-    if (!okEmail)       { email.focus();   return; }
-    if (!okMensaje)     { mensaje.focus(); return; }
+    if (!okEmpresa)  { empresa.focus();  return; }
+    if (!okTelefono) { telefono.focus(); return; }
+    if (!okEmail)    { email.focus();    return; }
+    if (!okMensaje)  { mensaje.focus();  return; }
 
-    // Todo correcto: preparamos el correo con mailto:
-    const asunto = encodeURIComponent('Contacto desde la hoja de vida — ' + nombre.value.trim());
-    const cuerpo = encodeURIComponent(
-      'Nombre: ' + nombre.value.trim() + '\n' +
-      'Correo: ' + email.value.trim()  + '\n\n' +
-      mensaje.value.trim()
-    );
+    // Verificar correo duplicado (almacenado en localStorage)
+    const emailVal   = email.value.trim().toLowerCase();
+    const enviados   = JSON.parse(localStorage.getItem('cv_emails_enviados') || '[]');
+    if (enviados.includes(emailVal)) {
+      showSubmitModal('error', 'Este correo ya fue utilizado para enviar un mensaje. Por favor usa otro correo para contactarme.');
+      return;
+    }
 
-    // Mostramos el aviso de éxito y abrimos el cliente de correo
-    note.classList.add('is-visible');
-    window.location.href = `mailto:${EMAIL_DESTINO}?subject=${asunto}&body=${cuerpo}`;
+    // Mostrar spinner (mínimo 3 segundos)
+    showSubmitModal('loading');
 
-    // Limpiamos el formulario tras un instante
-    setTimeout(() => {
-      nombre.value = ''; email.value = ''; mensaje.value = '';
-    }, 600);
-    setTimeout(() => note.classList.remove('is-visible'), 6000);
+    const templateParams = {
+      empresa:  empresa.value.trim(),
+      telefono: telefono.value.trim(),
+      email:    email.value.trim(),
+      mensaje:  mensaje.value.trim(),
+    };
+
+    Promise.all([
+      emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams),
+      new Promise(resolve => setTimeout(resolve, 3000)),
+    ])
+    .then(() => {
+      // Guardar correo para evitar duplicados
+      enviados.push(emailVal);
+      localStorage.setItem('cv_emails_enviados', JSON.stringify(enviados));
+      // Limpiar campos
+      empresa.value = ''; telefono.value = ''; email.value = ''; mensaje.value = '';
+      showSubmitModal('success');
+    })
+    .catch(() => {
+      showSubmitModal('error', 'No se pudo enviar el mensaje. Revisa tu conexión e intenta de nuevo.');
+    });
   });
 
 
   /* ------------------------------------------------------------------
-     9) DESCARGAR CV (PDF)
-     Abre el diálogo de impresión del navegador. Con la hoja de estilo
-     de impresión (@media print en styles.css) la página se convierte en
-     un CV claro y ordenado; el usuario elige "Guardar como PDF".
+     9) MODAL DE DESCARGA DEL CV
+     Abre un modal de confirmación; al aceptar descarga el PDF real.
      ------------------------------------------------------------------ */
-  const btnCv = document.getElementById('downloadCv');
-  if (btnCv) {
-    btnCv.addEventListener('click', () => {
-      closeMenu();
-      window.print();
+  const btnCv        = document.getElementById('downloadCv');
+  const modalOverlay = document.getElementById('downloadModal');
+  const modalClose   = document.getElementById('modalClose');
+  const modalCancel  = document.getElementById('modalCancel');
+  const modalConfirm = document.getElementById('modalConfirm');
+
+  const openDownloadModal = () => {
+    closeMenu();
+    modalOverlay.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+    modalClose.focus();
+  };
+
+  const closeDownloadModal = () => {
+    modalOverlay.classList.remove('is-open');
+    document.body.style.overflow = '';
+    btnCv.focus();
+  };
+
+  if (btnCv)        btnCv.addEventListener('click',        openDownloadModal);
+  if (modalClose)   modalClose.addEventListener('click',   closeDownloadModal);
+  if (modalCancel)  modalCancel.addEventListener('click',  closeDownloadModal);
+
+  // Al confirmar: inicia la descarga y cierra el modal con un pequeño delay
+  if (modalConfirm) {
+    modalConfirm.addEventListener('click', () => {
+      setTimeout(closeDownloadModal, 400);
     });
   }
+
+  // Cerrar al hacer clic sobre el fondo oscuro
+  if (modalOverlay) {
+    modalOverlay.addEventListener('click', (e) => {
+      if (e.target === modalOverlay) closeDownloadModal();
+    });
+  }
+
+  // Cerrar con la tecla Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modalOverlay.classList.contains('is-open')) {
+      closeDownloadModal();
+    }
+  });
 
 });

@@ -7,7 +7,7 @@
 Página web de currículum personal de una sola página, con estética **dark premium
 y acento dorado**. Rápida, responsive y sin dependencias.
 
-`HTML5` · `CSS3` · `JavaScript (vanilla)` · `Sin build` · `GitHub Pages`
+`HTML5` · `CSS3` · `JavaScript (vanilla)` · `EmailJS` · `GitHub Pages`
 
 </div>
 
@@ -16,7 +16,7 @@ y acento dorado**. Rápida, responsive y sin dependencias.
 ## ✦ Descripción
 
 Hoja de vida digital tipo *one-page* (scroll vertical) pensada para presentarse
-ante empleadores. Diseño oscuro, elegante y sobrio, con un dorado como acento de
+ante empleadores. Diseño oscuro, elegante y sobrio, con dorado como acento de
 marca y un **rombo dorado** como firma visual recurrente. Todo el contenido es
 real y está listo para publicarse.
 
@@ -24,77 +24,60 @@ real y está listo para publicarse.
 
 - 🎯 **Una sola página** con navegación de scroll suave entre secciones.
 - 🌙 **Estética dark + dorada** definida por variables CSS fáciles de editar.
-- 📱 **100% responsive** (celular, tablet y computador) con menú hamburguesa en móvil.
+- 📱 **100% responsive** — desde iPhone SE hasta pantallas 4K, con soporte landscape.
 - ✨ **Animaciones de aparición** al hacer scroll y barras de nivel animadas (idiomas).
 - 🧭 **Menú activo** que resalta la sección visible (scroll-spy).
-- 📨 **Formulario de contacto** con validación en JavaScript que abre el correo (`mailto:`).
+- 📥 **Descargar CV en PDF**: botón con modal de confirmación que descarga el PDF real.
+- 📨 **Formulario de contacto** con envío real a Gmail vía EmailJS (sin backend). Modal de carga con spinner dorado → éxito o error. Detecta correos duplicados.
 - 💬 **Acceso directo a WhatsApp** como canal principal de contacto.
-- 🖨️ **Descargar CV en PDF** desde el navegador: el botón abre el diálogo de impresión
-  y la página se transforma en una hoja clara y ordenada gracias a `@media print`.
-- ♿ **Accesible**: HTML semántico, buen contraste, foco visible, `alt` en imágenes,
-  área táctil de 48px, inputs a 16px (sin zoom en iOS) y soporte de `prefers-reduced-motion`.
-- ⚡ **Sin dependencias ni paso de compilación**: lo que ves es lo que se publica.
+- 🗺️ **Ubicación** enlaza directo a Google Maps.
+- 🔗 **Todos los links** abren en pestaña nueva.
+- ♿ **Accesible**: HTML semántico, contraste adecuado, foco visible, `alt` en imágenes, área táctil 48px, inputs 16px (sin zoom en iOS), `prefers-reduced-motion`.
+- ⚡ **Sin dependencias ni build**: lo que ves es lo que se publica.
 
 ## ✦ Tecnologías
 
-| Capa        | Herramienta                                   |
-| ----------- | --------------------------------------------- |
-| Estructura  | HTML5 semántico                               |
-| Estilos     | CSS3 (variables, grid, flexbox, `@media print`) |
-| Interacción | JavaScript puro (IntersectionObserver, etc.)  |
-| Tipografías | Google Fonts — Sora · Hanken Grotesk · JetBrains Mono |
-| Hosting     | GitHub Pages (sitio estático)                 |
+| Capa        | Herramienta                                              |
+| ----------- | -------------------------------------------------------- |
+| Estructura  | HTML5 semántico                                          |
+| Estilos     | CSS3 (variables, grid, flexbox, clamp, `@media print`)   |
+| Interacción | JavaScript puro (IntersectionObserver, modales, EmailJS) |
+| Correo      | EmailJS (CDN) — envío directo a Gmail sin backend        |
+| Tipografías | Google Fonts — Sora · Hanken Grotesk · JetBrains Mono   |
+| Hosting     | GitHub Pages (sitio estático)                            |
 
 ## ✦ Estructura del proyecto
 
 ```
-hoja-de-vida-jehanpier/
-├── index.html      # Marcado y contenido del CV
-├── styles.css      # Estilos + tokens en :root + CV imprimible
-├── script.js       # Menú, animaciones, validación, scroll-spy
+Hoja_Vida_JampyDev/
+├── index.html                   # Marcado y contenido del CV
+├── README.md                    # Este archivo
+├── .gitignore
+├── css/
+│   └── styles.css               # Estilos + tokens en :root + @media print
+├── js/
+│   └── script.js                # Menú, animaciones, modales, formulario
 ├── img/
-│   └── perfil.jpg  # Foto de perfil (retrato vertical 3:4)
-├── CLAUDE.md       # Contexto del proyecto para Claude Code
-└── README.md       # Este archivo
+│   └── Foto-Jehanpier.jpg       # Foto de perfil (retrato vertical 3:4)
+└── pdf/
+    └── CV-Jehanpier-Estrada.pdf # CV en PDF (se descarga con el botón)
 ```
 
 ## ✦ Cómo verla en local
 
-Opción rápida — abre `index.html` con doble clic.
-
-O sírvela con un servidor local (recomendado para que todo cargue igual que en producción):
+Abre `index.html` con doble clic, o sírvela con un servidor local:
 
 ```bash
-# Python 3
 python3 -m http.server 8000
 # luego abre http://localhost:8000
 ```
 
 ## ✦ Publicar en GitHub Pages
 
-1. Sube el proyecto a un repositorio de GitHub:
-   ```bash
-   git init
-   git add .
-   git commit -m "Hoja de vida web"
-   git branch -M main
-   git remote add origin https://github.com/<tu-usuario>/<tu-repo>.git
-   git push -u origin main
-   ```
-2. En GitHub: **Settings → Pages → Branch: `main` / carpeta `/root` → Save**.
-3. En un par de minutos estará disponible en
-   `https://<tu-usuario>.github.io/<tu-repo>/`.
-
-## ✦ Personalización
-
-- **Cambiar la foto:** reemplaza `img/perfil.jpg` por tu retrato vertical (ideal 3:4).
-  No necesitas tocar el HTML.
-- **Cambiar colores:** edita las variables al inicio de `styles.css`, en `:root`.
-  Por ejemplo, `--gold` controla el dorado de toda la página.
-- **Cambiar textos:** todo el contenido está en `index.html`, claramente comentado.
-- **PDF propio:** el botón usa la impresión del navegador (*Guardar como PDF*).
-  Si prefieres enlazar tu propio archivo, cambia el botón por
-  `<a href="cv.pdf" download>` y coloca el PDF en la raíz.
+1. El repositorio ya está conectado en GitHub.
+2. Ve a **Settings → Pages → Branch: `main` / carpeta `/root` → Save**.
+3. En unos minutos estará disponible en:
+   `https://jampier-developer.github.io/Hoja_Vida_JampyDev/`
 
 ## ✦ Contacto
 

@@ -16,8 +16,9 @@
   <meta property="og:description" content="Hoja de vida digital · Técnico Laboral en Sistemas · Cartagena de Indias, Bolívar." />
   <meta property="og:locale" content="es_CO" />
 
-  <!-- Favicon: rombo dorado en SVG (no requiere archivo aparte) -->
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230e0f12'/%3E%3Crect x='10' y='10' width='12' height='12' fill='%23d4af37' transform='rotate(45 16 16)'/%3E%3C/svg%3E" />
+  <!-- Favicon: foto de perfil -->
+  <link rel="icon" type="image/jpeg" href="img/Foto-Jehanpier.jpg" />
+  <link rel="apple-touch-icon" href="img/Foto-Jehanpier.jpg" />
 
   <!-- ===================== TIPOGRAFÍAS ===================== -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -461,7 +462,7 @@
               </span>
             </a>
 
-            <a class="contact-item reveal d3" href="mailto:jampierdev@gmail.com">
+            <a class="contact-item reveal d3" href="https://mail.google.com/mail/?view=cm&to=jampierdev@gmail.com" target="_blank" rel="noopener">
               <span class="contact-item__icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>
               </span>
@@ -471,7 +472,7 @@
               </span>
             </a>
 
-            <div class="contact-item reveal d1">
+            <a class="contact-item reveal d1" href="https://www.google.com/maps/search/Barrio+20+de+Julio,+Cartagena+de+Indias,+Bol%C3%ADvar,+Colombia" target="_blank" rel="noopener">
               <span class="contact-item__icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0Z"/><circle cx="12" cy="10" r="3"/></svg>
               </span>
@@ -479,7 +480,7 @@
                 <span class="contact-item__label">Ubicación</span>
                 <span class="contact-item__value">Cartagena de Indias, Bolívar — Barrio 20 de Julio</span>
               </span>
-            </div>
+            </a>
 
             <div class="contact-item reveal d2">
               <span class="contact-item__icon" aria-hidden="true">
@@ -492,16 +493,21 @@
             </div>
           </div>
 
-          <!-- Formulario (validación en JavaScript) -->
+          <!-- Formulario (validación en JavaScript + envío por EmailJS) -->
           <div class="form reveal d2">
             <div class="field">
-              <label for="nombre">Nombre</label>
-              <input type="text" id="nombre" name="nombre" placeholder="Tu nombre completo" autocomplete="name" />
-              <span class="field__error">Por favor escribe tu nombre.</span>
+              <label for="empresa">Nombre de la empresa</label>
+              <input type="text" id="empresa" name="empresa" placeholder="Nombre de la empresa u organización" autocomplete="organization" />
+              <span class="field__error">Por favor escribe el nombre de la empresa.</span>
             </div>
             <div class="field">
-              <label for="email">Correo electrónico</label>
-              <input type="email" id="email" name="email" placeholder="tucorreo@ejemplo.com" autocomplete="email" />
+              <label for="telefono">Teléfono de la empresa</label>
+              <input type="tel" id="telefono" name="telefono" placeholder="Ej: 300 123 4567" autocomplete="tel" />
+              <span class="field__error">Por favor escribe un número de teléfono.</span>
+            </div>
+            <div class="field">
+              <label for="email">Correo electrónico de la empresa</label>
+              <input type="email" id="email" name="email" placeholder="correo@empresa.com" autocomplete="email" />
               <span class="field__error">Escribe un correo válido.</span>
             </div>
             <div class="field">
@@ -514,11 +520,6 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
               Enviar mensaje
             </button>
-
-            <p class="form__note" id="formNote">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
-              <span>¡Listo! Se abrirá tu correo con el mensaje preparado.</span>
-            </p>
           </div>
 
         </div>
@@ -537,7 +538,7 @@
         <span class="brand__mark" aria-hidden="true">JE</span>
         <div>
           <div class="footer-name">Jehanpier Antonio Estrada Cabarcas</div>
-          <div class="footer-copy">Técnico en Sistemas · © 2026</div>
+          <div class="footer-copy">Técnico en Sistemas e Informática · © 2026</div>
         </div>
       </div>
 
@@ -557,6 +558,85 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg>
   </button>
 
+  <!-- ======================================================
+       MODAL — Resultado del envío del formulario
+       ====================================================== -->
+  <div class="modal-overlay" id="submitModal" role="dialog" aria-modal="true" aria-labelledby="sModalTitle">
+    <div class="modal submit-modal">
+
+      <!-- Estado 1: spinner cargando -->
+      <div class="smodal-state" id="sStateLoading">
+        <div class="spinner" aria-hidden="true">
+          <svg viewBox="0 0 50 50" fill="none">
+            <circle cx="25" cy="25" r="20" stroke="rgba(212,175,55,.18)" stroke-width="4"/>
+            <circle cx="25" cy="25" r="20" stroke="currentColor" stroke-width="4"
+                    stroke-linecap="round" stroke-dasharray="80 46"/>
+          </svg>
+        </div>
+        <p class="smodal-label">Enviando mensaje…</p>
+      </div>
+
+      <!-- Estado 2: éxito -->
+      <div class="smodal-state" id="sStateSuccess">
+        <div class="smodal-icon smodal-icon--ok" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+               stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+        </div>
+        <h3 class="smodal-title" id="sModalTitle">¡Mensaje enviado!</h3>
+        <p class="smodal-desc">Gracias por contactarme.<br>Te respondo lo antes posible.</p>
+        <button class="btn btn--gold smodal-btn" id="sModalOk">¡Genial!</button>
+      </div>
+
+      <!-- Estado 3: error -->
+      <div class="smodal-state" id="sStateError">
+        <div class="smodal-icon smodal-icon--err" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+               stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+          </svg>
+        </div>
+        <h3 class="smodal-title">Algo salió mal</h3>
+        <p class="smodal-desc" id="sModalErrorMsg">No se pudo enviar el mensaje.</p>
+        <button class="btn btn--ghost smodal-btn" id="sModalClose">Cerrar</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ======================================================
+       MODAL — Confirmación de descarga del CV
+       ====================================================== -->
+  <div class="modal-overlay" id="downloadModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal">
+      <button class="modal__close" id="modalClose" aria-label="Cerrar modal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+
+      <div class="modal__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg>
+      </div>
+
+      <h3 class="modal__title" id="modalTitle">Descargar hoja de vida</h3>
+      <p class="modal__desc">
+        ¿Deseas descargar el CV de
+        <strong>Jehanpier Estrada</strong>
+        en formato PDF?
+      </p>
+
+      <div class="modal__actions">
+        <button class="btn btn--ghost" id="modalCancel">Cancelar</button>
+        <a class="btn btn--gold" id="modalConfirm"
+           href="pdf/CV-Jehanpier-Estrada.pdf"
+           download="CV-Jehanpier-Estrada.pdf">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg>
+          Descargar PDF
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- EmailJS: envío de formulario directo a Gmail sin backend -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script src="js/script.js"></script>
 </body>
 </html>

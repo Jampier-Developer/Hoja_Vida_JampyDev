@@ -1309,8 +1309,185 @@ button {
 }
 
 /* ----------------------------------------------------------------------
-   16) ESTILOS DE IMPRESIÓN  ·  "Descargar CV (PDF)" usa window.print()
-       Convierte la página oscura en una hoja de vida clara y legible.
+   16) MODAL — Confirmación de descarga del CV
+   ---------------------------------------------------------------------- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  padding: var(--gutter);
+  background: rgba(0,0,0,.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .3s var(--ease), visibility .3s;
+}
+.modal-overlay.is-open { opacity: 1; visibility: visible; }
+
+.modal {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  background: linear-gradient(160deg, var(--panel), var(--panel-2));
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow:
+    0 48px 96px -24px rgba(0,0,0,.9),
+    0 0 0 1px rgba(212,175,55,.1),
+    inset 0 1px 0 rgba(255,255,255,.04);
+  padding: clamp(28px, 5vw, 42px);
+  text-align: center;
+  transform: translateY(24px) scale(.96);
+  transition: transform .38s var(--ease);
+}
+.modal-overlay.is-open .modal { transform: translateY(0) scale(1); }
+
+.modal__close {
+  position: absolute;
+  top: 14px; right: 14px;
+  width: 36px; height: 36px;
+  display: grid; place-items: center;
+  border-radius: 8px;
+  color: var(--text-3);
+  transition: color .2s var(--ease), background .2s var(--ease);
+}
+@media (hover: hover) {
+  .modal__close:hover { color: var(--text); background: rgba(255,255,255,.06); }
+}
+.modal__close svg { width: 18px; height: 18px; }
+
+.modal__icon {
+  width: 68px; height: 68px;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  background: rgba(212,175,55,.08);
+  border: 1px solid rgba(212,175,55,.3);
+  color: var(--gold);
+  margin-inline: auto;
+  margin-bottom: 22px;
+  box-shadow: 0 0 28px rgba(212,175,55,.15);
+}
+.modal__icon svg { width: 30px; height: 30px; }
+
+.modal__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.28rem;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+
+.modal__desc {
+  color: var(--text-2);
+  font-size: .97rem;
+  line-height: 1.6;
+  margin-bottom: 30px;
+  max-width: 32ch;
+  margin-inline: auto;
+}
+.modal__desc strong { color: var(--gold-soft); font-weight: 600; }
+
+.modal__actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.modal__actions .btn {
+  flex: 1;
+  min-width: 130px;
+  padding: 11px 22px;
+  font-size: .9rem;
+  white-space: nowrap;
+}
+
+/* ----------------------------------------------------------------------
+   17) MODAL DE ENVÍO — spinner + estados éxito / error
+   ---------------------------------------------------------------------- */
+
+/* Spinner dorado giratorio */
+.spinner {
+  width: 64px; height: 64px;
+  color: var(--gold);
+  animation: spin 1.1s linear infinite;
+  margin-inline: auto;
+  margin-bottom: 18px;
+}
+.spinner svg { width: 100%; height: 100%; display: block; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .spinner { animation: none; } }
+
+/* Contenedor centrado del modal de envío */
+.submit-modal {
+  text-align: center;
+  padding: clamp(32px, 6vw, 48px);
+}
+
+/* Cada estado del modal (loading / success / error) */
+.smodal-state          { display: none; flex-direction: column; align-items: center; }
+.smodal-state.is-active { display: flex; }
+
+/* Texto bajo el spinner */
+.smodal-label {
+  font-family: var(--font-mono);
+  font-size: .82rem;
+  letter-spacing: .1em;
+  color: var(--text-3);
+}
+
+/* Icono circular (check o X) */
+.smodal-icon {
+  width: 72px; height: 72px;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  margin-inline: auto;
+  margin-bottom: 20px;
+  animation: popIn .5s var(--ease) both;
+}
+.smodal-icon svg { width: 32px; height: 32px; }
+
+.smodal-icon--ok {
+  background: rgba(212,175,55,.1);
+  border: 2px solid rgba(212,175,55,.45);
+  color: var(--gold);
+  box-shadow: 0 0 28px rgba(212,175,55,.2);
+}
+.smodal-icon--err {
+  background: rgba(224,86,79,.1);
+  border: 2px solid rgba(224,86,79,.45);
+  color: #e0564f;
+  box-shadow: 0 0 28px rgba(224,86,79,.15);
+}
+
+@keyframes popIn {
+  0%   { transform: scale(.5); opacity: 0; }
+  70%  { transform: scale(1.08); }
+  100% { transform: scale(1);   opacity: 1; }
+}
+
+.smodal-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+
+.smodal-desc {
+  color: var(--text-2);
+  font-size: .97rem;
+  line-height: 1.6;
+  margin-bottom: 28px;
+  max-width: 28ch;
+}
+
+.smodal-btn { width: 100%; }
+
+/* ----------------------------------------------------------------------
+   18) ESTILOS DE IMPRESIÓN
    ---------------------------------------------------------------------- */
 @media print {
   :root {
