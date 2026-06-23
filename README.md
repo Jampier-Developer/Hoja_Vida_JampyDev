@@ -7,7 +7,9 @@
 Página web de currículum personal de una sola página, con estética **dark premium
 y acento dorado**. Rápida, responsive y sin dependencias.
 
-`HTML5` · `CSS3` · `JavaScript (vanilla)` · `EmailJS` · `GitHub Pages`
+`HTML5` · `CSS3` · `JavaScript (vanilla)` · `EmailJS` · `Cloudflare Pages`
+
+**🌐 [jehanpier.pages.dev](https://jehanpier.pages.dev/)**
 
 </div>
 
@@ -32,6 +34,8 @@ real y está listo para publicarse.
 - 💬 **Acceso directo a WhatsApp** como canal principal de contacto.
 - 🗺️ **Ubicación** enlaza directo a Google Maps.
 - 🔗 **Todos los links** abren en pestaña nueva.
+- 🔍 **SEO profesional**: título, description, keywords, canonical, geo tags, Open Graph, Twitter Card y JSON-LD Person schema.
+- 🗂️ **sitemap.xml + robots.txt** para indexación rápida en Google.
 - ♿ **Accesible**: HTML semántico, contraste adecuado, foco visible, `alt` en imágenes, área táctil 48px, inputs 16px (sin zoom en iOS), `prefers-reduced-motion`.
 - ⚡ **Sin dependencias ni build**: lo que ves es lo que se publica.
 
@@ -44,7 +48,7 @@ real y está listo para publicarse.
 | Interacción | JavaScript puro (IntersectionObserver, modales, EmailJS) |
 | Correo      | EmailJS (CDN) — envío directo a Gmail sin backend        |
 | Tipografías | Google Fonts — Sora · Hanken Grotesk · JetBrains Mono   |
-| Hosting     | GitHub Pages (sitio estático)                            |
+| Hosting     | Cloudflare Pages                                         |
 
 ## ✦ Estructura del proyecto
 
@@ -52,6 +56,8 @@ real y está listo para publicarse.
 Hoja_Vida_JampyDev/
 ├── index.html                   # Marcado y contenido del CV
 ├── README.md                    # Este archivo
+├── sitemap.xml                  # Mapa del sitio para Google
+├── robots.txt                   # Permite indexación y apunta al sitemap
 ├── .gitignore
 ├── css/
 │   └── styles.css               # Estilos + tokens en :root + @media print
@@ -71,13 +77,6 @@ Abre `index.html` con doble clic, o sírvela con un servidor local:
 python3 -m http.server 8000
 # luego abre http://localhost:8000
 ```
-
-## ✦ Publicar en GitHub Pages
-
-1. El repositorio ya está conectado en GitHub.
-2. Ve a **Settings → Pages → Branch: `main` / carpeta `/root` → Save**.
-3. En unos minutos estará disponible en:
-   `https://jampier-developer.github.io/Hoja_Vida_JampyDev/`
 
 ## ✦ Contacto
 
