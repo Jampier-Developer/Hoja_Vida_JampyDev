@@ -170,9 +170,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ── Credenciales EmailJS ─────────────────────────────────────────────
      Reemplaza estos tres valores con los que obtengas en emailjs.com     */
-  const EMAILJS_PUBLIC_KEY  = 'TU_PUBLIC_KEY';   // Account > API Keys
-  const EMAILJS_SERVICE_ID  = 'TU_SERVICE_ID';   // Email Services
-  const EMAILJS_TEMPLATE_ID = 'TU_TEMPLATE_ID';  // Email Templates
+  const EMAILJS_PUBLIC_KEY  = 'ceRJGF_mdqnRZ9wzN';
+  const EMAILJS_SERVICE_ID  = 'gmail_jehanpier';
+  const EMAILJS_TEMPLATE_ID = 'template_3tvgk5d';
   /* ───────────────────────────────────────────────────────────────────── */
 
   emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
