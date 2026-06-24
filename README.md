@@ -30,7 +30,7 @@ real y está listo para publicarse.
 - ✨ **Animaciones de aparición** al hacer scroll y barras de nivel animadas (idiomas).
 - 🧭 **Menú activo** que resalta la sección visible (scroll-spy).
 - 📥 **Descargar CV en PDF**: botón con modal de confirmación que descarga el PDF real.
-- 📨 **Formulario de contacto** con envío real a Gmail vía EmailJS (sin backend). Modal de carga con spinner dorado → éxito o error. Detecta correos duplicados.
+- 📨 **Formulario de contacto funcional**: envío real a Gmail vía EmailJS (sin backend). Modal con spinner dorado → éxito o error. Detecta correos duplicados.
 - 💬 **Acceso directo a WhatsApp** como canal principal de contacto.
 - 🗺️ **Ubicación** enlaza directo a Google Maps.
 - 🔗 **Todos los links** abren en pestaña nueva.
