@@ -26,16 +26,17 @@ real y está listo para publicarse.
 
 - 🎯 **Una sola página** con navegación de scroll suave entre secciones.
 - 🌙 **Estética dark + dorada** definida por variables CSS fáciles de editar.
-- 📱 **100% responsive** — desde iPhone SE hasta pantallas 4K, con soporte landscape.
+- 📱 **100% responsive** — desde iPhone SE hasta pantallas 4K, con soporte landscape y orientación horizontal.
 - ✨ **Animaciones de aparición** al hacer scroll y barras de nivel animadas (idiomas).
 - 🧭 **Menú activo** que resalta la sección visible (scroll-spy).
-- 📥 **Descargar CV en PDF**: botón con modal de confirmación que descarga el PDF real.
+- 📥 **Descargar CV en PDF**: modal de confirmación → verifica que el PDF exista antes de descargar. Si no existe, muestra modal de error con contacto directo.
 - 📨 **Formulario de contacto funcional**: envío real a Gmail vía EmailJS (sin backend). Modal con spinner dorado → éxito o error. Detecta correos duplicados.
 - 💬 **Acceso directo a WhatsApp** como canal principal de contacto.
 - 🗺️ **Ubicación** enlaza directo a Google Maps.
 - 🔗 **Todos los links** abren en pestaña nueva.
 - 🔍 **SEO profesional**: título, description, keywords, canonical, geo tags, Open Graph, Twitter Card y JSON-LD Person schema.
 - 🗂️ **sitemap.xml + robots.txt** para indexación rápida en Google.
+- 📊 **Google Search Console** verificado y sitemap enviado — indexación activa.
 - ♿ **Accesible**: HTML semántico, contraste adecuado, foco visible, `alt` en imágenes, área táctil 48px, inputs 16px (sin zoom en iOS), `prefers-reduced-motion`.
 - ⚡ **Sin dependencias ni build**: lo que ves es lo que se publica.
 
@@ -54,19 +55,20 @@ real y está listo para publicarse.
 
 ```
 Hoja_Vida_JampyDev/
-├── index.html                   # Marcado y contenido del CV
-├── README.md                    # Este archivo
-├── sitemap.xml                  # Mapa del sitio para Google
-├── robots.txt                   # Permite indexación y apunta al sitemap
+├── index.html                      # Marcado y contenido del CV
+├── README.md                       # Este archivo
+├── sitemap.xml                     # Mapa del sitio para Google
+├── robots.txt                      # Permite indexación y apunta al sitemap
+├── googleb9bed816d05afe45.html     # Verificación de Google Search Console
 ├── .gitignore
 ├── css/
-│   └── styles.css               # Estilos + tokens en :root + @media print
+│   └── styles.css                  # Estilos + tokens en :root + @media print
 ├── js/
-│   └── script.js                # Menú, animaciones, modales, formulario
+│   └── script.js                   # Menú, animaciones, modales, formulario
 ├── img/
-│   └── Foto-Jehanpier.jpg       # Foto de perfil (retrato vertical 3:4)
+│   └── Foto-Me-CV-smokin.png       # Foto de perfil (retrato vertical 3:4)
 └── pdf/
-    └── CV-Jehanpier-Estrada.pdf # CV en PDF (se descarga con el botón)
+    └── CV- Jehanpier-Estrada.pdf   # CV en PDF (se descarga con el botón)
 ```
 
 ## ✦ Cómo verla en local
