@@ -284,13 +284,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ------------------------------------------------------------------
      9) MODAL DE DESCARGA DEL CV
-     Abre un modal de confirmación; al aceptar descarga el PDF real.
+     Verifica que el PDF exista antes de descargarlo. Si no existe,
+     muestra el modal de "PDF no encontrado" con datos de contacto.
      ------------------------------------------------------------------ */
+  const PDF_PATH = 'pdf/CV- Jehanpier-Estrada.pdf';
+
   const btnCv        = document.getElementById('downloadCv');
   const modalOverlay = document.getElementById('downloadModal');
   const modalClose   = document.getElementById('modalClose');
   const modalCancel  = document.getElementById('modalCancel');
   const modalConfirm = document.getElementById('modalConfirm');
+
+  // Modal de PDF no encontrado
+  const pdfNFModal = document.getElementById('pdfNotFoundModal');
+  const pdfNFClose = document.getElementById('pdfNFClose');
+  const pdfNFOk    = document.getElementById('pdfNFOk');
 
   const openDownloadModal = () => {
     closeMenu();
@@ -305,14 +313,46 @@ document.addEventListener('DOMContentLoaded', () => {
     btnCv.focus();
   };
 
+  const openPdfNFModal = () => {
+    pdfNFModal.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+  };
+
+  const closePdfNFModal = () => {
+    pdfNFModal.classList.remove('is-open');
+    document.body.style.overflow = '';
+  };
+
   if (btnCv)        btnCv.addEventListener('click',        openDownloadModal);
   if (modalClose)   modalClose.addEventListener('click',   closeDownloadModal);
   if (modalCancel)  modalCancel.addEventListener('click',  closeDownloadModal);
+  if (pdfNFClose)   pdfNFClose.addEventListener('click',  closePdfNFModal);
+  if (pdfNFOk)      pdfNFOk.addEventListener('click',     closePdfNFModal);
 
-  // Al confirmar: inicia la descarga y cierra el modal con un pequeño delay
+  // Al confirmar: verifica que el PDF exista antes de descargarlo
   if (modalConfirm) {
     modalConfirm.addEventListener('click', () => {
-      setTimeout(closeDownloadModal, 400);
+      fetch(PDF_PATH, { method: 'HEAD' })
+        .then((res) => {
+          closeDownloadModal();
+          if (res.ok) {
+            // PDF existe: disparar descarga
+            const a = document.createElement('a');
+            a.href = PDF_PATH;
+            a.download = 'CV-Jehanpier-Estrada.pdf';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+          } else {
+            // PDF no encontrado en el servidor
+            openPdfNFModal();
+          }
+        })
+        .catch(() => {
+          // Error de red o archivo no existe
+          closeDownloadModal();
+          openPdfNFModal();
+        });
     });
   }
 
@@ -322,11 +362,17 @@ document.addEventListener('DOMContentLoaded', () => {
       if (e.target === modalOverlay) closeDownloadModal();
     });
   }
+  if (pdfNFModal) {
+    pdfNFModal.addEventListener('click', (e) => {
+      if (e.target === pdfNFModal) closePdfNFModal();
+    });
+  }
 
   // Cerrar con la tecla Escape
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && modalOverlay.classList.contains('is-open')) {
-      closeDownloadModal();
+    if (e.key === 'Escape') {
+      if (modalOverlay.classList.contains('is-open')) closeDownloadModal();
+      if (pdfNFModal.classList.contains('is-open'))   closePdfNFModal();
     }
   });
 
