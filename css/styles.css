@@ -1160,19 +1160,17 @@ button {
 @media (max-width: 980px) {
   .hero__grid {
     grid-template-columns: 1fr;
-    gap: 64px;
+    gap: 48px;
   }
   .hero__photo-wrap {
     order: -1;
     width: min(260px, 62vw);
     margin-inline: auto;
-    /* compensa el photo-badge absoluto (bottom:-22px + alto ~36px) */
     padding-bottom: 50px;
   }
   .hero__text { text-align: left; }
   .hero__desc { max-width: 56ch; }
 
-  /* Forzamos 3 columnas en facts para evitar el 2+1 asimétrico */
   .about__facts  { grid-template-columns: repeat(3, 1fr); }
   .about__grid   { grid-template-columns: 1fr; }
   .contact__grid { grid-template-columns: 1fr; }
@@ -1183,7 +1181,6 @@ button {
 @media (max-width: 760px) {
   .nav-toggle { display: flex; }
 
-  /* Panel desplegable con altura máxima y scroll interno */
   .nav {
     position: fixed;
     inset: var(--header-h) 0 auto 0;
@@ -1227,8 +1224,18 @@ button {
 
   .brand__name { display: none; }
 
-  /* Hero ajustado */
+  /* Ocultar scroll-cue en móvil: en pantallas pequeñas puede solaparse
+     con los meta-items del hero (dirección, teléfono) */
+  .scroll-cue { display: none; }
+
+  /* Hero: menos padding inferior ya que no hay scroll-cue */
+  .hero { padding-bottom: 48px; }
+
   .hero__photo-wrap { width: min(230px, 58vw); padding-bottom: 48px; }
+
+  /* Meta items del hero en columna para evitar solapamientos */
+  .hero__meta      { flex-direction: column; gap: 10px; }
+  .hero__meta-item { font-size: .92rem; }
 
   /* Skills y langs colapsan a 1 columna */
   .skills__grid { grid-template-columns: 1fr; }
@@ -1240,10 +1247,28 @@ button {
   .grid-cards--2,
   .grid-cards--3   { grid-template-columns: 1fr; }
 
-  .hero__photo-wrap    { width: min(210px, 64vw); padding-bottom: 46px; }
+  .hero__photo-wrap    { width: min(200px, 60vw); padding-bottom: 46px; }
   .hero__actions       { flex-direction: column; align-items: stretch; }
   .hero__actions .btn  { width: 100%; }
-  .photo-badge         { font-size: .66rem; padding: 8px 14px; }
+
+  /* Badge: evitar que se salga de pantalla */
+  .photo-badge {
+    font-size: .64rem;
+    padding: 7px 13px;
+    max-width: 90vw;
+    white-space: normal;
+    text-align: center;
+  }
+
+  /* Role pill: reducir letra y permitir wrap */
+  .hero__role {
+    font-size: .75rem;
+    letter-spacing: .1em;
+    padding: 8px 14px;
+  }
+
+  /* Nombre: asegurar que no se corte */
+  .hero__name { letter-spacing: -.02em; }
 
   /* Facts: 3 columnas compactas */
   .about__facts { grid-template-columns: repeat(3, 1fr); gap: 10px; }
@@ -1260,20 +1285,35 @@ button {
   .chip  { padding: 8px 14px; font-size: .85rem; }
 
   /* Contacto */
-  .contact-item       { padding: 13px 14px; }
-  .contact-item__icon { width: 40px; height: 40px; }
+  .contact-item       { padding: 13px 14px; gap: 12px; }
+  .contact-item__icon { width: 38px; height: 38px; }
   .contact-item__icon svg { width: 18px; height: 18px; }
+  .contact-item__value { font-size: .93rem; word-break: break-all; }
 
   .footer-inner { flex-direction: column; align-items: flex-start; }
+  .footer-nav   { gap: 4px; }
 }
 
-/* ── Móvil muy pequeño (≤ 380px) — iPhone SE, Galaxy A, Moto E ──────── */
+/* ── Móvil pequeño (≤ 420px) — Redmi A7, Galaxy A, iPhone SE 3 ──────── */
+@media (max-width: 420px) {
+  .hero__desc { font-size: .97rem; }
+
+  /* Facts a 2 columnas si el texto no cabe en 3 */
+  .about__facts { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+
+  /* Sección: menos padding vertical */
+  .section { padding-block: clamp(56px, 9vh, 96px); }
+}
+
+/* ── Móvil muy pequeño (≤ 380px) — iPhone SE 1/2, Moto E ────────────── */
 @media (max-width: 380px) {
   :root { --gutter: 16px; }
 
-  .hero__photo-wrap { width: min(180px, 70vw); padding-bottom: 44px; }
-  .hero__meta       { gap: 8px 14px; }
-  .hero__meta-item  { font-size: .84rem; }
+  .hero__photo-wrap { width: min(170px, 68vw); padding-bottom: 44px; }
+  .hero__meta       { gap: 8px; }
+  .hero__meta-item  { font-size: .85rem; }
+
+  .photo-badge { font-size: .6rem; padding: 6px 12px; }
 
   .about__facts { gap: 8px; }
   .fact         { padding: 12px 7px; }
@@ -1284,8 +1324,13 @@ button {
   .chips  { gap: 7px; }
   .chip   { padding: 7px 12px; font-size: .82rem; }
 
-  .contact-item__label { letter-spacing: .1em; }
-  .contact-item__value { font-size: .92rem; }
+  .tl-role    { font-size: 1.05rem; }
+  .tl-card    { padding: 16px 14px; }
+
+  .contact-item__label { letter-spacing: .08em; }
+  .contact-item__value { font-size: .88rem; }
+
+  .footer-nav a { padding: 6px 10px; font-size: .82rem; }
 }
 
 /* ── Orientación horizontal en móvil (landscape) ────────────────────── */
@@ -1293,7 +1338,7 @@ button {
   .hero {
     min-height: auto;
     padding-top:    calc(var(--header-h) + 20px);
-    padding-bottom: 44px;
+    padding-bottom: 40px;
   }
   .hero__grid {
     grid-template-columns: 1fr 1fr;
@@ -1302,10 +1347,11 @@ button {
   }
   .hero__photo-wrap {
     order: 0;
-    width: min(160px, 30vw);
+    width: min(140px, 28vw);
     padding-bottom: 36px;
     margin-inline: auto;
   }
+  .scroll-cue { display: none; }
 }
 
 /* ----------------------------------------------------------------------
